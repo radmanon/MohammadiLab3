@@ -3,16 +3,15 @@ const url = require('url');
 const utils = require('./modules/utils');
 const fileHandler = require('./modules/handler');
 const msg = require('./lang/en').msg;
-const fs = require('fs');
 
 
 class Server {
     constructor(port = process.env.PORT || 8888){
-        this.port = port;
+        this.port = port || 8888;
     }
 
     start(){
-        http.createServer((req,res) => this.handleRequest(req, res)).listen(this.port, "0.0.0.0",() => {
+        http.createServer((req,res) => this.handleRequest(req, res)).listen(this.port, () => {
             console.log(`Server is running at http://localhost:${this.port}/`);
         });
     }
@@ -20,7 +19,6 @@ class Server {
         const q = url.parse(req.url, true);
         const pathname = q.pathname;
         const qdata = q.query;
-        const name = qdata.name
 
         if (pathname === '/getDate') {
             return this.handleGetDate(res, qdata);
@@ -63,7 +61,7 @@ class Server {
 
     handleReadFile(res, pathname){
         const filename = pathname.replace('/readFile/', '').trim(); //extract the file name entered by user and trim() because if user enter spaces it will be empty
-        if (!filename || filename.includes('/') || filename.includes('..')) {
+        if (!filename) {
             res.writeHead(400, { 'Content-Type': 'text/html' });
             return res.end(`<p style="color:red;">${msg.noFileName}</p>`);
         }
@@ -82,3 +80,5 @@ class Server {
         res.end(`<p style="color:red;">${msg.invalidEndpoint}</p>`);
     }
 }
+
+module.exports = Server;
