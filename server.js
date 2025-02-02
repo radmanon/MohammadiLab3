@@ -12,7 +12,7 @@ class Server {
     }
 
     start(){
-        http.createServer((req,res) => this.handleRequest(req, res)).listen(this.port, () => {
+        http.createServer((req,res) => this.handleRequest(req, res)).listen(this.port, "0.0.0.0",() => {
             console.log(`Server is running at http://localhost:${this.port}/`);
         });
     }
