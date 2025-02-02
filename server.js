@@ -7,7 +7,7 @@ const fs = require('fs');
 
 
 class Server {
-    constructor(port = 8888){
+    constructor(port = process.env.PORT || 8888){
         this.port = port;
     }
 
